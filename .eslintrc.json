@@ -1,0 +1,11 @@
+{
+  "extends": "@jasonnutter/eslint-config",
+  "env": {
+      "browser": false
+  },
+  "rules": {
+      "consistent-return": 0,
+      "default-case": 0,
+      "indent": [ "error", 4, { "SwitchCase": 1 } ]
+  }
+}
