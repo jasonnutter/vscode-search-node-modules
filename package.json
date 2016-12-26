@@ -3,7 +3,7 @@
   "displayName": "Search node_modules",
   "description": "Quickly search the node_modules folder.",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "jasonnutter",
   "engines": {
     "vscode": "^1.5.0"

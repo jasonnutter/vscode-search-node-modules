@@ -1,6 +1,6 @@
 # Search node_modules
 
-![](./img/demo.gif)
+![](https://raw.githubusercontent.com/jasonnutter/vscode-search-node-modules/master/img/demo.gif)
 
 Simple plugin for VS Code that allows you to quickly navigate the file inside your project's `node_modules` directory.
 
