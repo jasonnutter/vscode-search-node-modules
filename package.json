@@ -26,7 +26,8 @@
       {
         "command": "extension.search",
         "key": "ctrl+k ctrl+n",
-        "mac": "cmd+k cmd+n"
+        "mac": "cmd+k cmd+n",
+        "when": "!terminalFocus"
       }
     ]
   },
