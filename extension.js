@@ -41,7 +41,7 @@ exports.activate = context => {
                 }
 
                 vscode.window.showQuickPick(files, {
-                    placeHolder: folderPath
+                    placeHolder: path.join(workspaceName, folderPath)
                 })
                 .then(selected => {
                     if (selected === workspaceNodeModules) {
