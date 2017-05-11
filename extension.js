@@ -5,10 +5,12 @@ const path = require('path');
 var lastFolder = '';
 const nodeModules = 'node_modules';
 
+const showError = message => vscode.window.showErrorMessage(`Search node_modules: ${message}`);
+
 exports.activate = context => {
     const searchNodeModules = vscode.commands.registerCommand('extension.search', () => {
         if (!vscode.workspace.rootPath) {
-            return vscode.window.showErrorMessage('Search node_modules: You must have a workspace opened.');
+            return showError('You must have a workspace opened.');
         }
 
         const preferences = vscode.workspace.getConfiguration('search-node-modules');
@@ -24,6 +26,14 @@ exports.activate = context => {
             const folderFullPath = path.join(vscode.workspace.rootPath, folderPath);
 
             fs.readdir(folderFullPath, (readErr, files) => {
+                if (readErr) {
+                    if (folderPath === nodeModules) {
+                        return showError('No node_modules folder in this workspace.');
+                    }
+
+                    return showError(`Unable to open folder ${folderPath}`);
+                }
+
                 if (folderPath !== nodeModules) {
                     files.push('');
                     files.push(workspaceNodeModules);
