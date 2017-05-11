@@ -34,7 +34,7 @@
             "title": "Search node_modules",
             "properties": {
                 "search-node-modules.useLastFolder": {
-                    "type": "bool",
+                    "type": "boolean",
                     "default": false,
                     "description": "Default to folder of last opened file when searching."
                 }
