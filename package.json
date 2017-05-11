@@ -1,70 +1,70 @@
 {
-  "name": "search-node-modules",
-  "displayName": "Search node_modules",
-  "description": "Quickly search the node_modules folder.",
-  "license": "MIT",
-  "version": "1.0.2",
-  "publisher": "jasonnutter",
-  "engines": {
-    "vscode": "^1.5.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:extension.search"
-  ],
-  "main": "./extension",
-  "contributes": {
-    "commands": [
-      {
-        "command": "extension.search",
-        "title": "Search node_modules"
-      }
+    "name": "search-node-modules",
+    "displayName": "Search node_modules",
+    "description": "Quickly search the node_modules folder.",
+    "license": "MIT",
+    "version": "1.1.0",
+    "publisher": "jasonnutter",
+    "engines": {
+        "vscode": "^1.5.0"
+    },
+    "categories": [
+        "Other"
     ],
-    "keybindings": [
-      {
-        "command": "extension.search",
-        "key": "ctrl+k ctrl+n",
-        "mac": "cmd+k cmd+n",
-        "when": "!terminalFocus"
-      }
+    "activationEvents": [
+        "onCommand:extension.search"
     ],
-    "configuration": {
-      "title": "Search node_modules",
-      "properties": {
-        "search-node-modules.useLastFolder": {
-          "type": "bool",
-          "default": false,
-          "description": "Default to folder of last opened file when searching."
+    "main": "./extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.search",
+                "title": "Search node_modules"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "extension.search",
+                "key": "ctrl+k ctrl+n",
+                "mac": "cmd+k cmd+n",
+                "when": "!terminalFocus"
+            }
+        ],
+        "configuration": {
+            "title": "Search node_modules",
+            "properties": {
+                "search-node-modules.useLastFolder": {
+                    "type": "bool",
+                    "default": false,
+                    "description": "Default to folder of last opened file when searching."
+                }
+            }
         }
-      }
-    }
-  },
-  "scripts": {
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "lint": "eslint ."
-  },
-  "devDependencies": {
-    "@jasonnutter/eslint-config": "^1.0.1",
-    "@types/node": "^6.0.40",
-    "babel-eslint": "^7.1.1",
-    "eslint": "^3.12.2",
-    "eslint-config-airbnb": "^13.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-mocha": "^4.8.0",
-    "eslint-plugin-react": "^6.8.0",
-    "pre-commit": "^1.2.2",
-    "typescript": "^2.0.3",
-    "vscode": "^1.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jasonnutter/search-node-modules"
-  },
-  "icon": "img/npm-logo.png",
-  "pre-commit": [
-    "lint"
-  ]
+    },
+    "scripts": {
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "lint": "eslint ."
+    },
+    "devDependencies": {
+        "@jasonnutter/eslint-config": "^1.0.1",
+        "@types/node": "^6.0.40",
+        "babel-eslint": "^7.1.1",
+        "eslint": "^3.12.2",
+        "eslint-config-airbnb": "^13.0.0",
+        "eslint-plugin-import": "^2.2.0",
+        "eslint-plugin-jsx-a11y": "^2.2.3",
+        "eslint-plugin-mocha": "^4.8.0",
+        "eslint-plugin-react": "^6.8.0",
+        "pre-commit": "^1.2.2",
+        "typescript": "^2.0.3",
+        "vscode": "^1.0.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jasonnutter/search-node-modules"
+    },
+    "icon": "img/npm-logo.png",
+    "pre-commit": [
+        "lint"
+    ]
 }
