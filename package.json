@@ -29,7 +29,17 @@
         "mac": "cmd+k cmd+n",
         "when": "!terminalFocus"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Search node_modules",
+      "properties": {
+        "search-node-modules.useLastFolder": {
+          "type": "bool",
+          "default": false,
+          "description": "Default to folder of last opened file when searching."
+        }
+      }
+    }
   },
   "scripts": {
     "postinstall": "node ./node_modules/vscode/bin/install",
