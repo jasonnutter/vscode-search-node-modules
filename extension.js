@@ -17,7 +17,7 @@ exports.activate = context => {
 
         const useLastFolder = preferences.get('useLastFolder', false);
 
-        const workspaceName = vscode.workspace.rootPath.split('/').pop();
+        const workspaceName = vscode.workspace.rootPath.split(path.sep).pop();
         const workspaceNodeModules = path.join(workspaceName, nodeModules);
 
         const searchPath = folderPath => {
