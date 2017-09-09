@@ -37,6 +37,11 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Default to folder of last opened file when searching."
+                },
+                "search-node-modules.path": {
+                    "type": "string",
+                    "default": "node_modules",
+                    "description": "Relative path to node_modules folder."
                 }
             }
         }

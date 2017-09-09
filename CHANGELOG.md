@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 1.2.0
+
+* Added: `search_node_modules.path` option to specify the path to your `node_modules` folder.
+
 # 1.1.0
 
 * Added: `search-node-modules.useLastFolder` option to default the file picker to the folder of the last opened file. Turned off by default, please provide feedback!

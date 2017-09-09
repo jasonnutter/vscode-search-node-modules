@@ -16,9 +16,10 @@ exports.activate = context => {
         const preferences = vscode.workspace.getConfiguration('search-node-modules');
 
         const useLastFolder = preferences.get('useLastFolder', false);
+        const nodeModulesPath = preferences.get('path', nodeModules);
 
         const workspaceName = vscode.workspace.rootPath.split(path.sep).pop();
-        const workspaceNodeModules = path.join(workspaceName, nodeModules);
+        const workspaceNodeModules = path.join(workspaceName, nodeModulesPath);
 
         const searchPath = folderPath => {
             lastFolder = '';
@@ -27,14 +28,14 @@ exports.activate = context => {
 
             fs.readdir(folderFullPath, (readErr, files) => {
                 if (readErr) {
-                    if (folderPath === nodeModules) {
+                    if (folderPath === nodeModulesPath) {
                         return showError('No node_modules folder in this workspace.');
                     }
 
                     return showError(`Unable to open folder ${folderPath}`);
                 }
 
-                if (folderPath !== nodeModules) {
+                if (folderPath !== nodeModulesPath) {
                     files.push('');
                     files.push(workspaceNodeModules);
                     files.push('..');
@@ -45,7 +46,7 @@ exports.activate = context => {
                 })
                 .then(selected => {
                     if (selected === workspaceNodeModules) {
-                        searchPath(nodeModules);
+                        searchPath(nodeModulesPath);
                     } else {
                         const selectedPath = path.join(folderPath, selected);
                         const selectedFullPath = path.join(vscode.workspace.rootPath, selectedPath);
@@ -64,7 +65,7 @@ exports.activate = context => {
             });
         };
 
-        const startingPath = useLastFolder && lastFolder ? lastFolder : nodeModules;
+        const startingPath = useLastFolder && lastFolder ? lastFolder : nodeModulesPath;
 
         searchPath(startingPath);
     });

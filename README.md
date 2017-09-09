@@ -20,6 +20,7 @@ Chances are you have the `node_modules` folder excluded from the built-in search
 ## Settings
 
 * `search-node-modules.useLastFolder`: Default to folder of last opened file when searching (defaults to `false`).
+* `search-node-modules.path`: Relative path to node_modules folder (defaults to `node_modules`).
 
 ## Extension Packs
 
