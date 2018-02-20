@@ -41,6 +41,30 @@ exports.activate = context => {
                     files.push('..');
                 }
 
+                const parts = folderPath.split('/');
+                const previousSearch = parts[parts.length - 2];
+                const currentSearch = parts[parts.length - 1];
+
+                if (previousSearch && (previousSearch !== 'node_modules' || currentSearch[0] !== '@')) {
+                    const openIfMatch = filename => {
+                        const file = files.find(_ => _.toLowerCase().split('.')[0] === filename);
+
+                        if (file) {
+                            const selectedPath = path.join(folderPath, file);
+                            const selectedFullPath = path.join(vscode.workspace.rootPath, selectedPath);
+
+                            vscode.workspace
+                                .openTextDocument(selectedFullPath, selectedPath)
+                                .then(vscode.window.showTextDocument);
+                            return true;
+                        }
+                    };
+
+                    if (openIfMatch('readme') || openIfMatch('package')) {
+                        return;
+                    }
+                }
+
                 vscode.window.showQuickPick(files, {
                     placeHolder: path.join(workspaceName, folderPath)
                 })
