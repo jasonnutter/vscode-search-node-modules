@@ -1,10 +1,10 @@
 # Search node_modules
 
-[![](http://vsmarketplacebadge.apphb.com/version-short/jasonnutter.search-node-modules.svg
+[![](https://vsmarketplacebadge.apphb.com/version-short/jasonnutter.search-node-modules.svg
 )
-![](http://vsmarketplacebadge.apphb.com/installs-short/jasonnutter.search-node-modules.svg
+![](https://vsmarketplacebadge.apphb.com/installs-short/jasonnutter.search-node-modules.svg
 )
-![](http://vsmarketplacebadge.apphb.com/rating-short/jasonnutter.search-node-modules.svg
+![](https://vsmarketplacebadge.apphb.com/rating-short/jasonnutter.search-node-modules.svg
 )](https://marketplace.visualstudio.com/items?itemName=jasonnutter.search-node-modules)
 
 ![](https://raw.githubusercontent.com/jasonnutter/vscode-search-node-modules/master/img/demo.gif)
