@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 1.3.0
+
+* Added: Initial support for multi-root workspaces.
+
 # 1.2.0
 
 * Added: `search_node_modules.path` option to specify the path to your `node_modules` folder.
