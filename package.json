@@ -62,7 +62,7 @@
         "eslint-plugin-react": "^6.8.0",
         "pre-commit": "^1.2.2",
         "typescript": "^2.0.3",
-        "vscode": "^1.0.0"
+        "vscode": "^1.1.10"
     },
     "repository": {
         "type": "git",
