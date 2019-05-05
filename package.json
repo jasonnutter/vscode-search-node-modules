@@ -71,5 +71,8 @@
     "icon": "img/npm-logo.png",
     "pre-commit": [
         "lint"
-    ]
+    ],
+    "dependencies": {
+        "glob": "^7.1.3"
+    }
 }
