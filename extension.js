@@ -82,7 +82,7 @@ exports.activate = context => {
             if (packages.length > 0) {
                 const selected = await vscode.window.showQuickPick(
                     [
-                        { label: workspaceFolder.name, packageDir: '' },
+                        { label: workspaceFolder.name, packageDir: '' }, // First option is the root dir
                         ...packages.map(packageDir => ({ label: path.join(workspaceFolder.name, packageDir), packageDir }))
                     ]
                     , { placeHolder: 'Select Project' }
