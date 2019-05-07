@@ -4,6 +4,7 @@ const path = require('path');
 const { findParentModules } = require('./find-parent-modules');
 const { findChildPackages } = require('./find-child-packages');
 const { showError } = require('./utils');
+const { sortFiles } = require('./sort-files');
 
 var lastFolder = '';
 var lastWorkspaceName = '';
@@ -18,6 +19,7 @@ exports.activate = context => {
         const useLastFolder = preferences.get('useLastFolder', false);
         const nodeModulesPath = preferences.get('path', nodeModules);
         const searchParentModules = preferences.get('searchParentModules', true);
+        const orderPriority = preferences.get('orderPriority', []);
 
         const searchPath = (workspaceName, workspaceRoot, folderPath) => {
             // Path to node_modules in this workspace folder
@@ -42,7 +44,7 @@ exports.activate = context => {
                 }
 
                 const isParentFolder = folderPath.includes('..');
-                const options = files;
+                const options = sortFiles(files, orderPriority);
 
                 // If searching in root node_modules, also include modules from parent folders, that are outside of the workspace
                 if (folderPath === nodeModulesPath) {
@@ -64,6 +66,7 @@ exports.activate = context => {
 
                 vscode.window.showQuickPick(options, {
                     placeHolder: path.format({ dir: workspaceName, base: folderPath})
+
                 })
                 .then(selected => {
                     // node_modules shortcut selected
