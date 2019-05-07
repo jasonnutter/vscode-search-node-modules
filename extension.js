@@ -1,7 +1,7 @@
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
-const { findLernaPackageDirs } = require('./utils');
+const { findChildPackages } = require('./find-child-packages');
 
 var lastFolder = '';
 var lastWorkspaceName = '';
@@ -77,8 +77,8 @@ exports.activate = context => {
         };
 
         const getProjectFolder = async (workspaceFolder) => {
-            const packages = await findLernaPackageDirs(workspaceFolder.uri.fsPath);
-            // If in a lerna monorepo, prompt user to select which project to traverse
+            const packages = await findChildPackages(workspaceFolder.uri.fsPath);
+            // If in a lerna/yarn monorepo, prompt user to select which project to traverse
             if (packages.length > 0) {
                 const selected = await vscode.window.showQuickPick(
                     [
