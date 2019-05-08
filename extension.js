@@ -2,14 +2,13 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 const { findChildPackages } = require('./find-child-packages');
+const { showError } = require('./utils');
 
 var lastFolder = '';
 var lastWorkspaceName = '';
 var lastWorkspaceRoot = '';
 
 const nodeModules = 'node_modules';
-
-const showError = message => vscode.window.showErrorMessage(`Search node_modules: ${message}`);
 
 exports.activate = context => {
     const searchNodeModules = vscode.commands.registerCommand('extension.search', () => {
