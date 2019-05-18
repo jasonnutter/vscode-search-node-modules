@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
+const { findParentModules } = require('./find-parent-modules');
 const { findChildPackages } = require('./find-child-packages');
 const { showError } = require('./utils');
 
@@ -16,6 +17,7 @@ exports.activate = context => {
 
         const useLastFolder = preferences.get('useLastFolder', false);
         const nodeModulesPath = preferences.get('path', nodeModules);
+        const searchParentModules = preferences.get('searchParentModules', true);
 
         const searchPath = (workspaceName, workspaceRoot, folderPath) => {
             // Path to node_modules in this workspace folder
@@ -30,7 +32,7 @@ exports.activate = context => {
             const folderFullPath = path.join(workspaceRoot, folderPath);
 
             // Read folder, built quick pick with files/folder (and shortcuts)
-            fs.readdir(folderFullPath, (readErr, files) => {
+            fs.readdir(folderFullPath, async (readErr, files) => {
                 if (readErr) {
                     if (folderPath === nodeModulesPath) {
                         return showError('No node_modules folder in this workspace.');
@@ -39,14 +41,29 @@ exports.activate = context => {
                     return showError(`Unable to open folder ${folderPath}`);
                 }
 
-                if (folderPath !== nodeModulesPath) {
-                    files.push('');
-                    files.push(workspaceNodeModules);
-                    files.push('..');
+                const isParentFolder = folderPath.includes('..');
+                const options = files;
+
+                // If searching in root node_modules, also include modules from parent folders, that are outside of the workspace
+                if (folderPath === nodeModulesPath) {
+                    if (searchParentModules) {
+                        const parentModules = await findParentModules(workspaceRoot, nodeModulesPath);
+                        options.push(...parentModules);
+                    }
+                } else  {
+                    // Otherwise, show option to move back to root
+                    options.push('');
+                    options.push(workspaceNodeModules);
+
+                    // If current folder is not outside of the workspace, also add option to move a step back
+                    if (!isParentFolder) {
+                        options.push('..');
+                    }
                 }
 
-                vscode.window.showQuickPick(files, {
-                    placeHolder: path.join(workspaceName, folderPath)
+
+                vscode.window.showQuickPick(options, {
+                    placeHolder: path.format({ dir: workspaceName, base: folderPath})
                 })
                 .then(selected => {
                     // node_modules shortcut selected
