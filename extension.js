@@ -2,14 +2,14 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 const { findParentModules } = require('./find-parent-modules');
+const { findChildPackages } = require('./find-child-packages');
+const { showError } = require('./utils');
 
 var lastFolder = '';
 var lastWorkspaceName = '';
 var lastWorkspaceRoot = '';
 
 const nodeModules = 'node_modules';
-
-const showError = message => vscode.window.showErrorMessage(`Search node_modules: ${message}`);
 
 exports.activate = context => {
     const searchNodeModules = vscode.commands.registerCommand('extension.search', () => {
@@ -92,6 +92,56 @@ exports.activate = context => {
             });
         };
 
+        const getProjectFolder = async (workspaceFolder) => {
+            const packages = await findChildPackages(workspaceFolder.uri.fsPath);
+            // If in a lerna/yarn monorepo, prompt user to select which project to traverse
+            if (packages.length > 0) {
+                const selected = await vscode.window.showQuickPick(
+                    [
+                        { label: workspaceFolder.name, packageDir: '' }, // First option is the root dir
+                        ...packages.map(packageDir => ({ label: path.join(workspaceFolder.name, packageDir), packageDir }))
+                    ]
+                    , { placeHolder: 'Select Project' }
+                );
+                if (!selected) {
+                    return;
+                }
+
+                return {
+                    name: selected.label,
+                    path: path.join(workspaceFolder.uri.fsPath, selected.packageDir)
+                };
+            }
+
+            // Otherwise, use the root folder
+            return {
+                name: workspaceFolder.name,
+                path: workspaceFolder.uri.fsPath
+            };
+        };
+
+        const getWorkspaceFolder = async () => {
+            // If in a multifolder workspace, prompt user to select which one to traverse.
+            if (vscode.workspace.workspaceFolders.length > 1) {
+                const selected = await vscode.window.showQuickPick(vscode.workspace.workspaceFolders.map(folder => ({
+                    label: folder.name,
+                    folder
+                })), {
+                    placeHolder: 'Select workspace folder'
+                });
+
+                if (!selected) {
+                    return;
+                }
+
+                return selected.folder;
+            }
+
+            // Otherwise, use the first one
+            const folder = vscode.workspace.workspaceFolders[0];
+            return folder;
+        };
+
         // Open last folder if there is one
         if (useLastFolder && lastFolder) {
             return searchPath(lastWorkspaceName, lastWorkspaceRoot, lastFolder);
@@ -102,24 +152,11 @@ exports.activate = context => {
             return showError('You must have a workspace opened.');
         }
 
-        // If in a multifolder workspace, prompt user to select which one to traverse.
-        if (vscode.workspace.workspaceFolders.length > 1) {
-            vscode.window.showQuickPick(vscode.workspace.workspaceFolders.map(folder => ({
-                label: folder.name,
-                folder
-            })), {
-                placeHolder: 'Select workspace folder'
-            })
-                .then(selected => {
-                    if (selected) {
-                        searchPath(selected.label, selected.folder.uri.fsPath, nodeModulesPath);
-                    }
-                });
-        } else {
-            // Otherwise, use the first one
-            const folder = vscode.workspace.workspaceFolders[0];
-            searchPath(folder.name, folder.uri.fsPath, nodeModulesPath);
-        }
+        getWorkspaceFolder().then(folder => folder && getProjectFolder(folder)).then(folder => {
+            if (folder) {
+                searchPath(folder.name, folder.path, nodeModulesPath);
+            }
+        });
     });
 
     context.subscriptions.push(searchNodeModules);
