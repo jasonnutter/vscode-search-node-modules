@@ -47,6 +47,11 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Include modules from parent folders in search results."
+                },
+                "search-node-modules.orderPriority": {
+                    "type": "array",
+                    "default": ["index.js", "README.md", "package.json"],
+                    "description": "List of preferred names that should be shown at the top of the result list"
                 }
             }
         }
