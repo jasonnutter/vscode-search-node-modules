@@ -1,5 +1,5 @@
 const fs = require('fs');
-const path = require('path').posix;
+const path = require('path');
 const util = require('util');
 
 const fsExists = util.promisify(fs.exists);
@@ -8,7 +8,8 @@ const fsReaddir = util.promisify(fs.readdir);
 // Looks for node_modules in parent folders of the workspace recursively.
 // Returns a list of paths relative to workspaceRoot/nodeModulesPath
 const findParentModules = async (workspaceRoot, nodeModulesPath) => {
-    const absoluteRootNodeModules = path.join('/', nodeModulesPath);
+    const rootDirectoryPath = path.parse(process.cwd()).root.toLowerCase();
+    const absoluteRootNodeModules = path.join(rootDirectoryPath, nodeModulesPath);
 
     const find = async dir => {
         const ret = [];
