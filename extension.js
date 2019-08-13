@@ -34,7 +34,7 @@ exports.activate = context => {
             const folderFullPath = path.join(workspaceRoot, folderPath);
 
             // Read folder, built quick pick with files/folder (and shortcuts)
-            fs.readdir(folderFullPath, async (readErr, files) => {
+            fs.readdir(folderFullPath, { withFileTypes: true }, async (readErr, files) => {
                 if (readErr) {
                     if (folderPath === nodeModulesPath) {
                         return showError('No node_modules folder in this workspace.');
