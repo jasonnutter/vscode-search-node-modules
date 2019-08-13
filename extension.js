@@ -55,7 +55,7 @@ exports.activate = context => {
                 } else  {
                     // Otherwise, show option to move back to root
                     options.push('');
-                    options.push(`${workspaceNodeModules}/`);
+                    options.push(`${workspaceNodeModules}${path.sep}`);
 
                     // If current folder is not outside of the workspace, also add option to move a step back
                     if (!isParentFolder) {
