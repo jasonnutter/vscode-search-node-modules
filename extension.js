@@ -34,7 +34,7 @@ exports.activate = context => {
             const folderFullPath = path.join(workspaceRoot, folderPath);
 
             // Read folder, built quick pick with files/folder (and shortcuts)
-            fs.readdir(folderFullPath, async (readErr, files) => {
+            fs.readdir(folderFullPath, { withFileTypes: true }, async (readErr, files) => {
                 if (readErr) {
                     if (folderPath === nodeModulesPath) {
                         return showError('No node_modules folder in this workspace.');
@@ -55,7 +55,7 @@ exports.activate = context => {
                 } else  {
                     // Otherwise, show option to move back to root
                     options.push('');
-                    options.push(workspaceNodeModules);
+                    options.push(`${workspaceNodeModules}${path.sep}`);
 
                     // If current folder is not outside of the workspace, also add option to move a step back
                     if (!isParentFolder) {
