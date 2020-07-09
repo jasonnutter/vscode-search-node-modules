@@ -63,35 +63,58 @@ exports.activate = context => {
                     }
                 }
 
+                function navigateTo(relavtivePath) {
+                    const selectedPath = path.join(folderPath, relavtivePath);
+                    const selectedFullPath = path.join(workspaceRoot, selectedPath);
 
-                vscode.window.showQuickPick(options, {
-                    placeHolder: path.format({ dir: workspaceName, base: folderPath})
+                    // If selected is a folder, traverse it,
+                    // otherwise open file.
+                    fs.stat(selectedFullPath, (statErr, stats) => {
+                        if (stats.isDirectory()) {
+                            searchPath(workspaceName, workspaceRoot, selectedPath);
+                        } else {
+                            lastWorkspaceName = workspaceName;
+                            lastWorkspaceRoot = workspaceRoot;
+                            lastFolder = folderPath;
 
-                })
-                .then(selected => {
-                    // node_modules shortcut selected
-                    if (selected === workspaceNodeModules) {
+                            vscode.workspace.openTextDocument(selectedFullPath, selectedPath)
+                            .then(vscode.window.showTextDocument);
+                        }
+                    });
+                }
+
+                let lastValue;
+                let lastSelection;
+                const quickPick = vscode.window.createQuickPick();
+                quickPick.items = [
+                    ...options.map(option => ({label: option})),
+                    {
+                        alwaysShow: true,
+                        label: 'Navigate...'
+                    }
+                ];
+                quickPick.placeHolder = path.format({ dir: workspaceName, base: folderPath});
+                quickPick.onDidHide(() => quickPick.dispose());
+                quickPick.onDidChangeSelection(selection => {
+                    lastSelection = selection[0].label;
+                });
+                quickPick.onDidChangeValue(value => {
+                    lastValue = value;
+                });
+                quickPick.onDidAccept(() => {
+                    const selected = lastSelection;
+                    if (selected === 'Navigate...') {
+                        // "deep" navigate, using last entered value
+                        navigateTo(lastValue);
+                    } else if (selected === workspaceNodeModules) {
+                        // node_modules shortcut selected
                         searchPath(workspaceName, workspaceRoot, nodeModulesPath);
                     } else {
-                        const selectedPath = path.join(folderPath, selected);
-                        const selectedFullPath = path.join(workspaceRoot, selectedPath);
-
-                        // If selected is a folder, traverse it,
-                        // otherwise open file.
-                        fs.stat(selectedFullPath, (statErr, stats) => {
-                            if (stats.isDirectory()) {
-                                searchPath(workspaceName, workspaceRoot, selectedPath);
-                            } else {
-                                lastWorkspaceName = workspaceName;
-                                lastWorkspaceRoot = workspaceRoot;
-                                lastFolder = folderPath;
-
-                                vscode.workspace.openTextDocument(selectedFullPath, selectedPath)
-                                .then(vscode.window.showTextDocument);
-                            }
-                        });
+                        navigateTo(selected);
                     }
+
                 });
+                quickPick.show();
             });
         };
 
